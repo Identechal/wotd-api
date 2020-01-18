@@ -1,7 +1,5 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-// 3rd Party
-const HttpStatus = require('http-status-codes');
 
 admin.initializeApp();
 
@@ -12,11 +10,17 @@ const wordsRef = db.collection('words');
 
 
 exports.addWord = functions.https.onRequest(async (req, res) => {
-	const original = req.query.word;
+	const word = req.query.word;
 
-	const snapshot = await wordsRef.doc().set({ "word": original });
+	var wordExists = !(await wordsRef.where('word', '==', word).get()).empty;
 
-	res.sendStatus(200);
+	if (!wordExists) {
+		const snapshot = await wordsRef.doc().set({ 'word': word });
+		res.send(201, 'Added ' + word);
+	}
+	else {
+		res.send(409, word + ' already exists');
+	}
 });
 
 exports.getWord = functions.https.onRequest(async (req, res) => {
