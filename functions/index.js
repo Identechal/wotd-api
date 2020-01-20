@@ -7,13 +7,24 @@ const db = admin.firestore();
 
 const wordsRef = db.collection('words');
 
-
+const letters = /^[A-Za-z]+$/;
 
 exports.addWord = functions.https.onRequest(async (req, res) => {
-	const word = req.query.word;
+	var word = req.query.word;
 
 	if (word == null) {
 		res.send(400, `Please provide a word`);
+		return;
+	}
+
+	word = word.trim().toLowerCase();
+
+	if (word.length == 0) {
+		res.send(400, `Words must have at least one letter`);
+		return;
+	}
+	else if (!word.match(letters)) {
+		res.send(400, `Words must only contain letters`);
 		return;
 	}
 
@@ -28,22 +39,26 @@ exports.addWord = functions.https.onRequest(async (req, res) => {
 	}
 });
 
-exports.getWord = functions.https.onRequest(async (req, res) => {
-	const docs = await wordsRef.listDocuments();
-
-	var doc = docs[Math.round((Math.random() * (docs.length - 1)))];
-
-	var word = (await doc.get()).get("word");
-
-	res.send(200, word);
-});
-
 exports.deleteWord = functions.https.onRequest(async (req, res) => {
-	const word = req.query.word;
+	var word = req.query.word;
+
+	if (word == null) {
+		res.send(400, `Please provide a word`);
+		return;
+	}
+
+	word = word.trim().toLowerCase();
+
+	if (word.length == 0) {
+		res.send(400, `Words must have at least one letter`);
+		return;
+	}
+	else if (!word.match(letters)) {
+		res.send(400, `Words must only contain letters`);
+		return;
+	}
 
 	var snapshot = await wordsRef.where('word', '==', word).get();
-
-	console.log(snapshot.empty);
 
 	if (snapshot.empty) {
 		res.send(200, `${word} doesn't exist`);
@@ -56,3 +71,14 @@ exports.deleteWord = functions.https.onRequest(async (req, res) => {
 
 	res.send(200, `${word} was deleted`);
 });
+
+exports.getWord = functions.https.onRequest(async (req, res) => {
+	const docs = await wordsRef.listDocuments();
+
+	var doc = docs[Math.round((Math.random() * (docs.length - 1)))];
+
+	var word = (await doc.get()).get("word");
+
+	res.send(200, word);
+});
+
