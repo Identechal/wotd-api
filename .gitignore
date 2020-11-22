@@ -64,3 +64,4 @@ node_modules/
 # dotenv environment variables file
 .env
 wotd-api-firebase-adminsdk-bn6iv-b94eb6c129.json
+functions/SECRET.json
