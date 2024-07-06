@@ -1,0 +1,25 @@
+{
+	"name": "wotd-api",
+	"version": "1.0.0",
+	"main": "index.js",
+	"engines": {
+		"node": "lts/iron"
+	},
+	"engineStrict": true,
+	"dependencies": {},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Identechal/wotd-api.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Identechal/wotd-api/issues"
+	},
+	"homepage": "https://github.com/Identechal/wotd-api#readme",
+	"description": ""
+}
